@@ -1,0 +1,12 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <ul>
+        {% for i in dic[0] %}
+            <li>
+                {{ i }} -> {{ dic[0][i] }}
+            </li>
+        {% endfor %}
+
+    </ul>
+{% endblock %}

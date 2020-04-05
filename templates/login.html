@@ -1,10 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "layout.html" %}
 
-</body>
-</html>
+{% block style %}
+{% endblock style %}
+
+{% block content %}
+    <div class="row mt-5">
+        <div class="col-lg-6 col-sm-8 mx-auto">
+        <form method="post" action="">
+            <legend class="border-bottom">Login</legend>
+  <div class="form-group mt-3">
+    <label>Username</label>
+    <input type="name" class="form-control form-control-lg" name="username">
+  </div>
+  <div class="form-group">
+    <label>Password</label>
+    <input type="password" class="form-control form-control-lg" name="password">
+  </div>
+  <button type="submit" class="btn btn-dark" >Submit</button>
+</form>
+        </div>
+    </div>
+{% endblock content %}
