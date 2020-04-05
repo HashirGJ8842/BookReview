@@ -1,9 +1,10 @@
-from flask import Flask, render_template, request, flash
+from flask import Flask, render_template, request, flash, session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 import os
 import requests
 from flask_bcrypt import Bcrypt
+from flask_session import Session
 
 
 bcrypt = Bcrypt()
@@ -11,12 +12,15 @@ engine = create_engine(os.getenv("DATABASE_URL"))
 db = scoped_session(sessionmaker(bind=engine))
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'POP'
+app.config['SESSION_PERMANENT'] = False
+app.config['SESSION_TYPE'] = 'filesystem'
+Session(app)
 
 
 @app.route('/',  methods=['POST', 'GET'])
 def index():
     # x = db.execute('SELECT * FROM test').fetchall()
-    return render_template('index.html')
+    return render_template('index.html', username=session['username'])
 
 
 @app.route('/register', methods=['POST', 'GET'])
@@ -30,7 +34,8 @@ def register():
                 return render_template('registration.html', title='Register')
             flash(f'{request.form.get("username")} successfully registered', 'success')
             db.commit()
-            return render_template('index.html')
+            session['username'] = request.form.get('username')
+            return render_template('index.html', username=session['username'])
         flash('Please make sure the passwords match', 'danger')
     return render_template('registration.html', title='Register')
 
@@ -43,7 +48,8 @@ def login():
             print(bcrypt.check_password_hash(t['password'], request.form.get('password')))
             if bcrypt.check_password_hash(t['password'], request.form.get('password')):
                 flash(f'Welcome {request.form.get("username")}', 'success')
-                return render_template('index.html')
+                session['username'] = request.form.get('username')
+                return render_template('index.html', username=session['username'])
             else:
                 flash('Username or password is incorrect', 'danger')
         else:
@@ -51,6 +57,17 @@ def login():
     return render_template('login.html', title='Login')
 
 
+@app.route('/search', methods=['POST', 'GET'])
+def search():
+
+    if request.method == 'POST':
+        isbn = db.execute('SELECT * FROM books WHERE isbn LIKE "%:a%"').fetchall()
+        title = db.execute('SELECT * FROM books WHERE title LIKE "%:a%"').fetchall()
+        author = db.execute('SELECT * FROM books WHERE author LIKE "%:a%"').fetchall()
+        data = dict({'isbn': isbn, 'title': title, 'author': author})
+        return render_template('search.html', data=data)
+    data = {}
+    return render_template('search.html', data=data)
 @app.route('/<int:isbn>', methods=['POST', 'GET'])
 def book(isbn):
     res = requests.get("https://www.goodreads.com/book/review_counts.json",
