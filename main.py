@@ -20,6 +20,8 @@ Session(app)
 @app.route('/',  methods=['POST', 'GET'])
 def index():
     # x = db.execute('SELECT * FROM test').fetchall()
+    if session.get('username') == None:
+        session['username'] = None
     return render_template('index.html', username=session['username'])
 
 
@@ -61,13 +63,15 @@ def login():
 def search():
 
     if request.method == 'POST':
-        isbn = db.execute('SELECT * FROM books WHERE isbn LIKE "%:a%"').fetchall()
-        title = db.execute('SELECT * FROM books WHERE title LIKE "%:a%"').fetchall()
-        author = db.execute('SELECT * FROM books WHERE author LIKE "%:a%"').fetchall()
+        isbn = db.execute("SELECT * FROM books WHERE isbn LIKE :a", {'a': f'%{request.form.get("search")}%'}).fetchall()
+        title = db.execute("SELECT * FROM books WHERE title LIKE :a", {'a': f'%{request.form.get("search")}%'}).fetchall()
+        author = db.execute("SELECT * FROM books WHERE author LIKE :a", {'a': f'%{request.form.get("search")}%'}).fetchall()
         data = dict({'isbn': isbn, 'title': title, 'author': author})
         return render_template('search.html', data=data)
     data = {}
     return render_template('search.html', data=data)
+
+
 @app.route('/<int:isbn>', methods=['POST', 'GET'])
 def book(isbn):
     res = requests.get("https://www.goodreads.com/book/review_counts.json",

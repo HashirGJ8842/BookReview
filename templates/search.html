@@ -1,0 +1,58 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div>
+    <div class="row mt-5">
+        <div class="col-2">
+
+        </div>
+        <div class="col-8">
+        <form method="post" action="">
+        <div class="form-group">
+            <input class="form-control form-control-lg" name="search" placeholder="Search by ISBN/Title/Author">
+            <button style="margin-left: 45%" class="btn btn-dark mt-5"> Submit </button>
+        </div>
+        </form>
+        </div>
+    </div>
+    {% if data %}
+        <div class="row">
+            <div class="col-2">
+
+            </div>
+            <div class="col-8">
+        <legend  class="border-bottom"> Search results by ISBN number </legend>
+        <ul>
+            {% if data['isbn'] %}
+            {% for i in data['isbn'] %}
+                <li><b>{{ i.title }}</b> by {{ i.author }}</li>
+            {% endfor %}
+            {% else %}
+                No results found!
+            {% endif %}
+        </ul>
+        <legend  class="border-bottom"> Search results by Title </legend>
+        <ul>
+            {% if data['title'] %}
+            {% for i in data['title'] %}
+                <li><b>{{ i.title }}</b> by {{ i.author }}</li>
+            {% endfor %}
+            {% else %}
+                No results found!
+            {% endif %}
+        </ul>
+        <legend class="border-bottom"> Search results by Author </legend>
+        <ul>
+            {% if data['author'] %}
+            {% for i in data['author'] %}
+                <li><b>{{ i.title }}</b> by {{ i.author }}</li>
+            {% endfor %}
+            {% else %}
+                No results found!
+            {% endif %}
+        </ul>
+                </div>
+            </div>
+    {% endif %}
+    </div>
+{% endblock content %}
