@@ -74,12 +74,15 @@ def search():
 
 @app.route('/<isbn>', methods=['POST', 'GET'])
 def book(isbn):
+    if request.method == "POST":
+        db.execute('INSERT INTO reviews (review, username, book_isbn) VALUES (:review, :username, :book_isbn)', {'review': request.form.get('review'), 'username': session['username'], 'book_isbn': isbn})
+    reviews = db.execute('SELECT * FROM reviews WHERE book_isbn=:isbn', {'isbn': isbn}).fetchall()
     res = requests.get("https://www.goodreads.com/book/review_counts.json",
                        params={"key": "FqiaInArQrrxtHZ4djffQ", "isbns": isbn})
     data = res.json()
     data = data['books'][0]
     book = db.execute("SELECT * FROM books WHERE isbn=:isbn", {'isbn': isbn}).fetchone()
-    return render_template('book.html', dic = data, book=book)
+    return render_template('book.html', dic = data, book=book, username=session['username'], reviews=reviews)
 
 
 @app.route('/api', methods=['POST', 'GET'])
