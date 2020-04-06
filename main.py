@@ -76,7 +76,8 @@ def search():
 def book(isbn):
     res = requests.get("https://www.goodreads.com/book/review_counts.json",
                        params={"key": "FqiaInArQrrxtHZ4djffQ", "isbns": isbn})
-    data = res.json
+    data = res.json()
+    data = data['books'][0]
     book = db.execute("SELECT * FROM books WHERE isbn=:isbn", {'isbn': isbn}).fetchone()
     return render_template('book.html', dic = data, book=book)
 
