@@ -72,13 +72,13 @@ def search():
     return render_template('search.html', data=data)
 
 
-@app.route('/<int:isbn>', methods=['POST', 'GET'])
+@app.route('/<isbn>', methods=['POST', 'GET'])
 def book(isbn):
     res = requests.get("https://www.goodreads.com/book/review_counts.json",
                        params={"key": "FqiaInArQrrxtHZ4djffQ", "isbns": isbn})
-    data = dict(res.json())
-    data = data['books']
-    return render_template('book.html', dic = data)
+    data = res.json
+    book = db.execute("SELECT * FROM books WHERE isbn=:isbn", {'isbn': isbn}).fetchone()
+    return render_template('book.html', dic = data, book=book)
 
 
 @app.route('/api', methods=['POST', 'GET'])

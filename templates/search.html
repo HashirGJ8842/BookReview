@@ -25,7 +25,7 @@
         <ul>
             {% if data['isbn'] %}
             {% for i in data['isbn'] %}
-                <li><b>{{ i.title }}</b> by {{ i.author }}</li>
+                <li><a href={{ url_for('book', isbn = i.isbn) }}><b>{{ i.title }}</b> by {{ i.author }}</a></li>
             {% endfor %}
             {% else %}
                 No results found!
@@ -35,7 +35,7 @@
         <ul>
             {% if data['title'] %}
             {% for i in data['title'] %}
-                <li><b>{{ i.title }}</b> by {{ i.author }}</li>
+                <li><a href={{ url_for('book', isbn = i.isbn) }}><b>{{ i.title }}</b> by {{ i.author }}</a></li>
             {% endfor %}
             {% else %}
                 No results found!
@@ -45,7 +45,7 @@
         <ul>
             {% if data['author'] %}
             {% for i in data['author'] %}
-                <li><b>{{ i.title }}</b> by {{ i.author }}</li>
+                <li><a href={{ url_for('book', isbn = i.isbn) }}><b>{{ i.title }}</b> by {{ i.author }}</a></li>
             {% endfor %}
             {% else %}
                 No results found!
