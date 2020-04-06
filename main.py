@@ -17,7 +17,7 @@ app.config['SESSION_TYPE'] = 'filesystem'
 Session(app)
 
 
-@app.route('/',  methods=['POST', 'GET'])
+@app.route('/')
 def index():
     # x = db.execute('SELECT * FROM test').fetchall()
     if session.get('username') == None:
