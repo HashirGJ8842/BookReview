@@ -45,6 +45,7 @@ def register():
 @app.route('/logout', methods=['POST', 'GET'])
 def logout():
     session['username'] = None
+    flash('Successfully logged out', 'success')
     return render_template('index.html', username=session['username'])
 
 
