@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="border-bottom"> API DOCUMENTATION </h1>
+        <p class="mt-3">https://vast-mesa-71372.herokuapp.com/api/{isbn}, where substitute the {isbn} with the isbn number to get json data in the following format</p>
+        <pre>{
+                    "author": "author of the book",
+                    "average_score": "average score",
+                    "isbn": "isbn number",
+                    "review_count": "reviews left",
+                    "title": "title of the book",
+                    "year": "year published"
+            }
+        </pre>
+        <p>For example, if isbn=0553588451, then https://vast-mesa-71372.herokuapp.com/api/{isbn} = <a href="https://vast-mesa-71372.herokuapp.com/api/0553588451">https://vast-mesa-71372.herokuapp.com/api/0553588451</a> will give the following json object:-</p>
+        <pre>{
+                    "author": "Keri Arthur",
+                    "average_score": "3.89",
+                    "isbn": "0553588451",
+                    "review_count": 49397,
+                    "title": "Full Moon Rising",
+                    "year": 2006
+            }
+        </pre>
+    </div>
+{% endblock content %}

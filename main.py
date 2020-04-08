@@ -91,6 +91,11 @@ def book(isbn):
     return render_template('book.html', dic = data, book=book, username=session['username'], reviews=reviews)
 
 
+@app.route('/api_documentation', methods=['POST', 'GET'])
+def document():
+    return render_template('document.html', username=session['username'])
+
+
 @app.route('/api/<isbn>', methods=['POST', 'GET'])
 def api(isbn):
     if session['username']:
