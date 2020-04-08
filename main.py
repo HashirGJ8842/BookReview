@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, flash, session
+from flask import Flask, render_template, request, flash, session, jsonify
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 import os
@@ -91,9 +91,22 @@ def book(isbn):
     return render_template('book.html', dic = data, book=book, username=session['username'], reviews=reviews)
 
 
-@app.route('/api', methods=['POST', 'GET'])
-def api():
-    res = requests.get(" https://www.goodreads.com/book/isbn_to_id",
-                       params={"key": "FqiaInArQrrxtHZ4djffQ", "isbn": "1632168146"})
-    print(res.json())
-    return f' {res.json()}'
+@app.route('/api/<isbn>', methods=['POST', 'GET'])
+def api(isbn):
+    if session['username']:
+        book = db.execute('SELECT * FROM books WHERE isbn=:isbn', {'isbn': isbn}).fetchone()
+        res = requests.get("https://www.goodreads.com/book/review_counts.json",
+                           params={"key": "FqiaInArQrrxtHZ4djffQ", "isbns": isbn})
+        data = res.json()
+        data = data['books'][0]
+        json_api = {
+            'title': book['title'],
+            'author': book['author'],
+            'year': book['time'],
+            'isbn': isbn,
+            'review_count': data['reviews_count'],
+            'average_score': data['average_rating']
+        }
+        return jsonify(json_api)
+    else:
+        return "Please Login then try again"
