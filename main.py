@@ -42,6 +42,12 @@ def register():
     return render_template('registration.html', title='Register')
 
 
+@app.route('/logout', methods=['POST', 'GET'])
+def logout():
+    session['username'] = None
+    return render_template('index.html', username=session['username'])
+
+
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == "POST":
@@ -67,9 +73,9 @@ def search():
         title = db.execute("SELECT * FROM books WHERE title LIKE :a", {'a': f'%{request.form.get("search")}%'}).fetchall()
         author = db.execute("SELECT * FROM books WHERE author LIKE :a", {'a': f'%{request.form.get("search")}%'}).fetchall()
         data = dict({'isbn': isbn, 'title': title, 'author': author})
-        return render_template('search.html', data=data)
+        return render_template('search.html', data=data, username=session['username'])
     data = {}
-    return render_template('search.html', data=data)
+    return render_template('search.html', data=data, username=session['username'])
 
 
 @app.route('/<isbn>', methods=['POST', 'GET'])
