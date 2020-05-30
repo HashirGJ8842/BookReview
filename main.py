@@ -97,26 +97,78 @@ def document():
     return render_template('document.html', username=session['username'])
 
 
-@app.route('/api/<isbn>', methods=['POST', 'GET'])
-def api(isbn):
+@app.route('/api/isbn/<isbn>', methods=['POST', 'GET'])
+def api_isbn(isbn):
     if session['username']:
-        book = db.execute('SELECT * FROM books WHERE isbn=:isbn', {'isbn': isbn}).fetchone()
-        res = requests.get("https://www.goodreads.com/book/review_counts.json",
-                           params={"key": "FqiaInArQrrxtHZ4djffQ", "isbns": isbn})
-        data = res.json()
-        data = data['books'][0]
-        json_api = {
-            'title': book['title'],
-            'author': book['author'],
-            'year': book['time'],
-            'isbn': isbn,
-            'review_count': data['reviews_count'],
-            'average_score': data['average_rating']
-        }
-        return jsonify(json_api)
+        books = db.execute('SELECT * FROM books WHERE isbn LIKE :isbn', {'isbn': f'%{isbn}%'}).fetchall()
+        total_api = []
+        for book in books:
+            res = requests.get("https://www.goodreads.com/book/review_counts.json",
+                               params={"key": "FqiaInArQrrxtHZ4djffQ", "isbns": book['isbn']})
+            data = res.json()
+            data = data['books'][0]
+            json_api = {
+                'title': book['title'],
+                'author': book['author'],
+                'year': book['time'],
+                'isbn': book['isbn'],
+                'review_count': data['reviews_count'],
+                'average_score': data['average_rating']
+            }
+            total_api.append(json_api)
+        return jsonify(total_api)
+    else:
+        return "Please Login then try again"
+
+
+@app.route('/api/title/<title>')
+def api_title(title):
+    if session['username']:
+        books = db.execute('SELECT * FROM books WHERE title LIKE :title', {'title': f'%{title}%'}).fetchall()
+        total_api = []
+        for book in books:
+            res = requests.get("https://www.goodreads.com/book/review_counts.json",
+                               params={"key": "FqiaInArQrrxtHZ4djffQ", "isbns": book['isbn']})
+            data = res.json()
+            data = data['books'][0]
+            json_api = {
+                'title': book['title'],
+                'author': book['author'],
+                'year': book['time'],
+                'isbn': book['isbn'],
+                'review_count': data['reviews_count'],
+                'average_score': data['average_rating']
+            }
+            total_api.append(json_api)
+        return jsonify(total_api)
+    else:
+        return "Please Login then try again"
+
+
+@app.route('/api/author/<author>')
+def api_author(author):
+    if session['username']:
+        books = db.execute('SELECT * FROM books WHERE author LIKE :author', {'author': f'%{author}%'}).fetchall()
+        total_api = []
+        for book in books:
+            res = requests.get("https://www.goodreads.com/book/review_counts.json",
+                               params={"key": "FqiaInArQrrxtHZ4djffQ", "isbns": book['isbn']})
+            data = res.json()
+            data = data['books'][0]
+            json_api = {
+                'title': book['title'],
+                'author': book['author'],
+                'year': book['time'],
+                'isbn': book['isbn'],
+                'review_count': data['reviews_count'],
+                'average_score': data['average_rating']
+            }
+            total_api.append(json_api)
+        return jsonify(total_api)
     else:
         return "Please Login then try again"
 
 
 if __name__ == "__main__":
+
     app.run(debug=True)
