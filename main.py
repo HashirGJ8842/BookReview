@@ -168,7 +168,3 @@ def api_author(author):
     else:
         return "Please Login then try again"
 
-
-if __name__ == "__main__":
-
-    app.run(debug=True)
