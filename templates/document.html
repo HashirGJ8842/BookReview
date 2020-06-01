@@ -1,27 +1,98 @@
 {% extends 'layout.html' %}
 
+{% block scripts %}
+<script src="static/index.js">
+
+</script>
+{% endblock scripts %}
+
 {% block content %}
     <div class="container">
         <h1 class="border-bottom"> API DOCUMENTATION </h1>
-        <p class="mt-3">https://vast-mesa-71372.herokuapp.com/api/{isbn}, where substitute the {isbn} with the isbn number to get json data in the following format</p>
-        <pre>{
-                    "author": "author of the book",
-                    "average_score": "average score",
-                    "isbn": "isbn number",
-                    "review_count": "reviews left",
-                    "title": "title of the book",
-                    "year": "year published"
-            }
+        <ul>
+            <li><a href="#" id="title_"> By Title </a></li>
+            <li><a href="#" id="author_"> By Author </a></li>
+            <li><a href="#" id="ISBN_"> By ISBN </a></li>
+        </ul>
+        <div id="title" style="display: none">
+        <p class="mt-3">https://book-review-hashir.herokuapp.com/api/title/{title}, where substitute the {title} with the title or a part of title to get the list of all the books data in JSON format.</p>
+        <p>For example, if title=pon, then https://book-review-hashir.herokuapp.com/api/title/{title} = <a href="https://book-review-hashir.herokuapp.com/api/title/pon">https://book-review-hashir.herokuapp.com/api/title/pon</a> will give the following json object:-</p>
+        <pre>
+                [
+                  {
+                    "author": "Nora Roberts",
+                    "average_score": "4.20",
+                    "isbn": "0749932775",
+                    "review_count": 92318,
+                    "title": "Dance Upon The Air",
+                    "year": 2001
+                  },
+                  {
+                    "author": "Vernor Vinge",
+                    "average_score": "4.14",
+                    "isbn": "0812515285",
+                    "review_count": 91521,
+                    "title": "A Fire Upon The Deep",
+                    "year": 1992
+                  },
+                  {
+                    "author": "Jean Ferris",
+                    "average_score": "3.99",
+                    "isbn": "0152050841",
+                    "review_count": 33961,
+                    "title": "Once Upon a Marigold",
+                    "year": 2002
+                  },
+                  {
+                    "author": "Iain M. Banks",
+                    "average_score": "4.18",
+                    "isbn": "185723135X",
+                    "review_count": 50321,
+                    "title": "Use of Weapons",
+                    "year": 1990
+                  }
+                ]
         </pre>
-        <p>For example, if isbn=0553588451, then https://vast-mesa-71372.herokuapp.com/api/{isbn} = <a href="https://vast-mesa-71372.herokuapp.com/api/0553588451">https://vast-mesa-71372.herokuapp.com/api/0553588451</a> will give the following json object:-</p>
-        <pre>{
-                    "author": "Keri Arthur",
+        </div>
+        <div id="author" style="display: none">
+        <p class="mt-3">https://book-review-hashir.herokuapp.com/api/author/{author}, where substitute the {author} with the author's name or a part of author's name to get the list of all the books data in JSON format.</p>
+        <p>For example, if author=pot, then https://book-review-hashir.herokuapp.com/api/author/{author} = <a href="https://book-review-hashir.herokuapp.com/api/author/pot">https://book-review-hashir.herokuapp.com/api/author/pot</a> will give the following json object:-</p>
+        <pre>
+                [
+                  {
+                    "author": "Truman Capote",
+                    "average_score": "4.07",
+                    "isbn": "0679745580",
+                    "review_count": 848154,
+                    "title": "In Cold Blood",
+                    "year": 1965
+                  },
+                  {
+                    "author": "Truman Capote",
                     "average_score": "3.89",
-                    "isbn": "0553588451",
-                    "review_count": 49397,
-                    "title": "Full Moon Rising",
-                    "year": 2006
-            }
+                    "isbn": "0679745653",
+                    "review_count": 231,
+                    "title": "Breakfast at Tiffany's",
+                    "year": 1958
+                  }
+                ]
         </pre>
+        </div>
+        <div id="isbn" style="display: none">
+        <p class="mt-3">https://book-review-hashir.herokuapp.com/api/isbn/{isbn}, where substitute the {isbn} with the isbn number or a part of isbn number to get the list of all the books data in JSON format.</p>
+        <p>For example, if isbn=9876, then https://book-review-hashir.herokuapp.com/api/isbn/{isbn} = <a href="https://book-review-hashir.herokuapp.com/api/isbn/9876">https://book-review-hashir.herokuapp.com/api/isbn/9876</a> will give the following json object:-</p>
+        <pre>
+                [
+                  {
+                    "author": "Armistead Maupin",
+                    "average_score": "4.03",
+                    "isbn": "0552998761",
+                    "review_count": 57160,
+                    "title": "Tales of the City",
+                    "year": 1978
+                  }
+                ]
+        </pre>
+        </div>
     </div>
 {% endblock content %}
